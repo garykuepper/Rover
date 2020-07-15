@@ -16,7 +16,7 @@ Servoshock Servoshock1(slaveSelect);  //create instance of Servoshock
 SimpleTimer timer;
 
 void servoshockUpdate();
-void motor(int stickIn, int &out);
+void motor(int stickIn, const int speedPin, const int A, const int B) ;
 
 void setup() {
   // put your setup code here, to run once:
@@ -29,7 +29,7 @@ void setup() {
   pinMode(rightMotorB, OUTPUT);
   motor(127, leftMotorPin, leftMotorA, leftMotorB);
   motor(127, rightMotorPin, rightMotorA, rightMotorB);
-  
+
 	SPI.setDataMode(SPI_MODE0);
 	SPI.setClockDivider(SPI_CLOCK_DIV16);
 	SPI.setBitOrder(MSBFIRST);
@@ -54,7 +54,7 @@ void servoshockUpdate() {
 	//Servoshock1.inPacket.rStickY;
 }
 
-void motor(int stickIn, int speedPin, int A, int B) {
+void motor(int stickIn, const int speedPin, const int A, const int B)  {
   int deadBand = 5;
   // fwd
   if (stickIn > 127 + deadBand) {
