@@ -55,17 +55,18 @@ void servoshockUpdate() {
 }
 
 void motor(int stickIn, const int speedPin, const int A, const int B)  {
-  int deadBand = 5;
-  // fwd
+  int deadBand = 20;
+  // fwd  
+  //Serial.println(stickIn);
   if (stickIn > 127 + deadBand) {
-    digitalWrite(A, LOW);
-    digitalWrite(B, HIGH);
+    digitalWrite(A, HIGH);
+    digitalWrite(B, LOW);
     analogWrite(speedPin, map(stickIn, 127, 255, 0, 255));
   }
   //reverse
   else if (stickIn < 127 - deadBand) {
-    digitalWrite(A, HIGH);
-    digitalWrite(B, LOW);
+    digitalWrite(A, LOW);
+    digitalWrite(B, HIGH);
     analogWrite(speedPin, map(stickIn, 127, 0, 0, 255));
   }
   //stop
