@@ -10,13 +10,19 @@ const int leftMotorB = 7;
 const int rightMotorPin = 3;
 const int rightMotorA = 4;
 const int rightMotorB = 2;
+const int lightPin = 6;
 int leftSpeed = 0;
 int rightSpeed = 0;
+int lightStatus = 0;
+int prevButton = 0;
+
+unsigned long timeLight = 0;
 Servoshock Servoshock1(slaveSelect);  //create instance of Servoshock
 SimpleTimer timer;
 
 void servoshockUpdate();
 void motor(int stickIn, const int speedPin, const int A, const int B) ;
+void lightSwitch(int buttonIn);
 
 void setup() {
   // put your setup code here, to run once:
@@ -27,6 +33,8 @@ void setup() {
   pinMode(rightMotorPin, OUTPUT);
   pinMode(rightMotorA, OUTPUT);
   pinMode(rightMotorB, OUTPUT);
+  pinMode(lightPin, OUTPUT);
+  analogWrite(lightPin, 0);
   motor(127, leftMotorPin, leftMotorA, leftMotorB);
   motor(127, rightMotorPin, rightMotorA, rightMotorB);
 
@@ -48,10 +56,8 @@ void servoshockUpdate() {
   Servoshock1.Update();  // update every 20 ms or 100Hz
   motor(Servoshock1.inPacket.lStickY, leftMotorPin, leftMotorA, leftMotorB);
   motor(Servoshock1.inPacket.rStickY, rightMotorPin, rightMotorA, rightMotorB);
-  //Servoshock1.inPacket.lStickX;	
-	//Servoshock1.inPacket.lStickY;	
-	//Servoshock1.inPacket.rStickX;	
-	//Servoshock1.inPacket.rStickY;
+  lightSwitch(Servoshock1.inPacket.square);
+
 }
 
 void motor(int stickIn, const int speedPin, const int A, const int B)  {
@@ -75,6 +81,21 @@ void motor(int stickIn, const int speedPin, const int A, const int B)  {
     digitalWrite(B, LOW);
     analogWrite(speedPin, 0);
   }
-  
-
+}
+void lightSwitch(int buttonIn) {   
+  unsigned long debounce = 1000; 
+  if(millis() - timeLight > debounce) {
+    if(buttonIn != prevButton) {      
+      if (lightStatus) {
+        analogWrite(lightPin, 0);
+        lightStatus = false;         
+      }
+      else {
+        analogWrite(lightPin, 120);
+        lightStatus = true;         
+      }         
+      timeLight = millis();             
+    }
+  }
+  prevButton = buttonIn;
 }
