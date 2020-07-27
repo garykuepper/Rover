@@ -52,7 +52,7 @@ void setup() {
 	SPI.begin();
   Serial.begin(115200);  //initialize serial monitor
   timer.setInterval(20, servoshockUpdate);
-  timerDisplay.setInterval(100, refreshDisplay);
+  timerDisplay.setInterval(200, refreshDisplay);
 
   if (!mpu.begin()) {
     Serial.println("Sensor init failed");
@@ -89,7 +89,7 @@ void refreshDisplay() {
   display.clearDisplay();
   display.setCursor(0, 0);
   display.print("Bat: ");
-  display.print(batteryVoltage);
+  display.print(batteryVoltage, 2);
   display.println("V");
   //display.println("Accelerometer - m/s^2");
   display.print(a.acceleration.x, 1);
