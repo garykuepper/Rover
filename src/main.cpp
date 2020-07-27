@@ -25,7 +25,7 @@ Servoshock Servoshock1(servoshockSelect);  //create instance of Servoshock
 SimpleTimer timer;
 SimpleTimer timerDisplay;
 Adafruit_MPU6050 mpu;
-Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
+Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire, -1);
 
 void servoshockUpdate();
 void motor(int stickIn, const int speedPin, const int A, const int B) ;
@@ -52,8 +52,8 @@ void setup() {
 	SPI.begin();
   Serial.begin(115200);  //initialize serial monitor
   timer.setInterval(20, servoshockUpdate);
-  timer.setInterval(100, refreshDisplay);
-  
+  timerDisplay.setInterval(100, refreshDisplay);
+
   if (!mpu.begin()) {
     Serial.println("Sensor init failed");
     while (1)
@@ -69,6 +69,7 @@ void setup() {
   }
   display.display();
   delay(500); // Pause for 2 seconds
+  display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setRotation(0);
