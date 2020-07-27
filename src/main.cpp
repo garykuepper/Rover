@@ -15,8 +15,8 @@ int leftSpeed = 0;
 int rightSpeed = 0;
 int lightStatus = 0;
 int prevButton = 0;
-
 unsigned long timeLight = 0;
+
 Servoshock Servoshock1(slaveSelect);  //create instance of Servoshock
 SimpleTimer timer;
 
@@ -84,6 +84,7 @@ void motor(int stickIn, const int speedPin, const int A, const int B)  {
 }
 void lightSwitch(int buttonIn) {   
   unsigned long debounce = 1000; 
+  //Serial.println(buttonIn);
   if(millis() - timeLight > debounce) {
     if(buttonIn != prevButton) {      
       if (lightStatus) {
@@ -91,7 +92,7 @@ void lightSwitch(int buttonIn) {
         lightStatus = false;         
       }
       else {
-        analogWrite(lightPin, 120);
+        analogWrite(lightPin, 50);
         lightStatus = true;         
       }         
       timeLight = millis();             
